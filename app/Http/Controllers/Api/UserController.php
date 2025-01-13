@@ -87,4 +87,14 @@ class UserController extends Controller
             return response()->json(['status'=>'error','message'=>'An error occured'.$e->getMessage()],500);
         }
     }
+    // -------------------------------------------Profile Detail------------------------------------//
+    public function userProfile(Request $request){
+        $id=$request->user()->id;
+        $userDetail=User::find($id);
+        if(!$userDetail){
+            return response()->json(['status'=>'success','message'=>'User not found!'],404);
+        }
+        $userDetail->profile_image=$userDetail->profile_image ? asset('storage/'.$userDetail->profile_image): null;
+        return response()->json(['status'=>'success','message'=>'Data fetched successfully!','data'=>$userDetail],200);
+    }
 }
