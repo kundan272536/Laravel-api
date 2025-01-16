@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 class UserController extends Controller
@@ -96,5 +97,12 @@ class UserController extends Controller
         }
         $userDetail->profile_image=$userDetail->profile_image ? asset('storage/'.$userDetail->profile_image): null;
         return response()->json(['status'=>'success','message'=>'Data fetched successfully!','data'=>$userDetail],200);
+    }
+    // -------------------------------------------Logout----------------------------------------------//
+    public function userLogout(Request $request){
+        Auth::user()->tokens->each(function ($token) {
+            $token->delete();
+        });
+        return response()->json(['status'=>'success','message'=>'User Logout successfully!']);
     }
 }
